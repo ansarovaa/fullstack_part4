@@ -1,4 +1,5 @@
 require("dotenv").config()
+const logger = require('./utils/logger')
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -17,10 +18,10 @@ const mongoUrl = process.env.MONGODB_URI;
 mongoose
   .connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    console.log("connected to db");
+    logger.info("connected to db");
   })
   .catch((err) => {
-    console.log("Error connecting to db", err.message);
+    logger.error("Error connecting to db", err.message);
   });
 
 app.use(cors())
