@@ -27,6 +27,10 @@ const listBlog = [
         title: 'My pain',
         author: 'Serik Idrissov',
         likes: 33
+    }, {
+        title: 'My gain',
+        author: 'Serik Idrissov',
+        likes: 33
     }
 ]
 
@@ -46,5 +50,12 @@ describe('most liked blog', () => {
     const result = listHelper.favoriteBlog(listBlog)
     test('show the blog with most likes', () => {
         expect(result).toEqual({title: 'My life', author: 'Ansarova Anar', likes: 2222000})
+    })
+})
+
+describe('author with max count of blogs', () => {
+    const result = listHelper.mostBlogs(listBlog)
+    test('show the author with most blogs', () => {
+        expect(result).toEqual({author: 'Serik Idrissov', blogs: 2})
     })
 })
