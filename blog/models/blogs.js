@@ -1,6 +1,17 @@
 const mongoose = require("mongoose");
 
-const blogSchema = mongoose.Schema({title: String, author: String, url: String, likes: Number});
+const blogSchema = mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    author: String,
+    url: {
+        type: String,
+        required: true
+    },
+    likes: Number
+});
 
 blogSchema.set('toJSON', {
     transform: (document, returnedObject) => {

@@ -64,6 +64,22 @@ describe('POST /blogs', function () {
         expect(response.body).toHaveLength(initialBlogs.length + 1)
         expect(titles).toContain('Visa')
     })
+    test('an empty likes should be equal to 0 value', async() => {
+        const newBlog = {
+
+            title: "VEmpty likes",
+            author: "Aziza Ansarova",
+            url: "vk.com"
+        }
+
+        const blogList = await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        expect(blogList.body).toHaveProperty('likes', 0)
+    })
 })
 
 afterAll(() => {

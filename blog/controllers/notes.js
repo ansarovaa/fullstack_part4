@@ -17,15 +17,15 @@ blogsRouter.get('/:id', async(request, response) => {
     }
 })
 
-blogsRouter.post("/", (request, response, next) => {
+blogsRouter.post("/", async (request, response, next) => {
     const body = request.body
-    const blog = new Blog({title: body.title, author: body.author, url: body.url, likes: body.likes})
-    blog
-        .save()
-        .then(savedBlog => {
-            response.json(savedBlog.toJSON())
-        })
-        .catch(error => next(error))
+    const blog = new Blog({title: body.title, author: body.author, url: body.url, likes: body.likes || 0})
+    try {
+        const savedBlog = await blog.save()
+        response.json(savedBlog.toJSON())
+    } catch (exception) {
+        next(exception)
+    }
 });
 
 module.exports = blogsRouter;

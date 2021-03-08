@@ -9,13 +9,16 @@ const mongoose = require('mongoose')
 
 const mongoUrl = config.MONGODB_URI;
 mongoose
-  .connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    logger.info("connected to db");
-  })
-  .catch((err) => {
-    logger.error("Error connecting to db", err.message);
-  });
+    .connect(mongoUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+    .then(() => {
+        logger.info("connected to db");
+    })
+    .catch((err) => {
+        logger.error("Error connecting to db", err.message);
+    });
 
 app.use(cors())
 app.use(express.json())
