@@ -39,6 +39,33 @@ describe('GET /blogs', function () {
 
 });
 
+describe('POST /blogs', function () {
+    test('a valid blog can be added', async() => {
+        const newBlog = {
+
+            title: "Visa",
+            author: "Aziza",
+            url: "vk.com",
+            likes: 74
+        }
+
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        const response = await api.get('/api/blogs')
+
+        const titles = response
+            .body
+            .map(r => r.title)
+
+        expect(response.body).toHaveLength(initialBlogs.length + 1)
+        expect(titles).toContain('Visa')
+    })
+})
+
 afterAll(() => {
     mongoose
         .connection
