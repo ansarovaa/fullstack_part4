@@ -80,6 +80,32 @@ describe('POST /blogs', function () {
 
         expect(blogList.body).toHaveProperty('likes', 0)
     })
+    test('title missing should return 400 error', async() => {
+        const newBlog = {
+            author: "Aziza Ansarova",
+            url: "vk.com",
+            likes: 39393
+        }
+
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+
+    })
+    test('url missing should return 400 error', async() => {
+        const newBlog = {
+            title: "testing",
+            author: "Aziza Ansarova",
+            likes: 39393
+        }
+
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+
+    })
 })
 
 afterAll(() => {
