@@ -39,6 +39,13 @@ describe('GET /blogs', function () {
 
 });
 
+describe('DELETE /blogs', function () {
+    test('should return 204 in case of successfull deleting', async () => {
+      await api.delete('/api/blogs/6045b1912121bb42b03d58ef').expect(204)
+    })
+  });
+  
+
 describe('POST /blogs', function () {
     test('a valid blog can be added', async() => {
         const newBlog = {
