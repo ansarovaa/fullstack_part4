@@ -40,11 +40,33 @@ describe('GET /blogs', function () {
 });
 
 describe('DELETE /blogs', function () {
-    test('should return 204 in case of successfull deleting', async () => {
-      await api.delete('/api/blogs/6045b1912121bb42b03d58ef').expect(204)
+    test('should return 204 in case of successfull deleting', async() => {
+        await api
+            .delete('/api/blogs/6045b1912121bb42b03d58ef')
+            .expect(204)
     })
-  });
-  
+});
+
+describe('PUT /blogs', function () {
+    test('should update blog', async() => {
+        const blogs = await api.get('/api/blogs');
+        const id = blogs.body[0].id;
+
+        const updatedBlogInfo = {
+            title: 'Love',
+            author: 'Chelsy',
+            url: 'vk.com',
+            likes: 27
+        }
+        const updatedBlog = await api
+            .put(`/api/blogs/${id}`)
+            .send(updatedBlogInfo)
+            .set('Accept', 'application/json')
+            .expect(200);
+
+        expect(updatedBlog.body).toHaveProperty('likes', 27);
+    })
+})
 
 describe('POST /blogs', function () {
     test('a valid blog can be added', async() => {
