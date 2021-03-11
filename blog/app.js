@@ -9,6 +9,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const usersRouter = require('./controllers/user')
 const mongoUrl = config.MONGODB_URI;
+const middleware = require('./utils/middleware')
 mongoose
     .connect(mongoUrl, {
     useNewUrlParser: true,
@@ -23,9 +24,9 @@ mongoose
 
 app.use(cors())
 app.use(express.json())
+app.use(middleware.tokenExtractor)
 app.use('/api/login', loginRouter)
 app.use("/api/users", usersRouter)
 app.use("/api/blogs", blogsRouter)
-
 
 module.exports = app
