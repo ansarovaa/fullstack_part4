@@ -1,5 +1,6 @@
 require("dotenv").config()
 const logger = require('./utils/logger')
+const loginRouter = require('./controllers/login')
 const config = require('./utils/config')
 const blogsRouter = require('./controllers/notes')
 const express = require('express')
@@ -22,6 +23,7 @@ mongoose
 
 app.use(cors())
 app.use(express.json())
+app.use('/api/login', loginRouter)
 app.use("/api/users", usersRouter)
 app.use("/api/blogs", blogsRouter)
 
