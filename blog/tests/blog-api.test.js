@@ -19,12 +19,27 @@ const initialBlogs = [
         likes: 373
     }
 ]
+
+let token
 beforeEach(async() => {
     await Blog.deleteMany({})
     let blogObject = new Blog(initialBlogs[0])
     await blogObject.save()
     blogObject = new Blog(initialBlogs[1])
     await blogObject.save()
+    await User.deleteMany({});
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash('testPassword', saltRounds);
+    const user = new User({username: 'monika', name: 'monika', passwordHash});
+
+    await user.save();
+
+    await api
+        .post('/api/login')
+        .send({username: 'monika', password: 'testPassword'})
+        .then((response) => {
+            token = response.body.token;
+        });
 })
 
 describe('GET /blogs', function () {
@@ -44,9 +59,25 @@ describe('GET /blogs', function () {
 
 describe('DELETE /blogs', function () {
     test('should return 204 in case of successfull deleting', async() => {
+        const blogToDelete = {
+            title: "My life",
+            author: "Anar Ansarova",
+            url: "www.vk.com",
+            likes: 3
+        }
+        const response = await api
+            .post('/api/blogs')
+            .set('Authorization', `bearer ${token}`)
+            .send(blogToDelete)
+            .expect(200)
+            .expect('Content-Type', /application\/json/);
+
+        const blogDelete = response.body;
+
         await api
-            .delete('/api/blogs/6045b1912121bb42b03d58ef')
-            .expect(204)
+            .delete(`/api/blogs/${blogDelete.id}`)
+            .set('Authorization', `bearer ${token}`)
+            .expect(204);
     })
 });
 
@@ -83,6 +114,7 @@ describe('POST /blogs', function () {
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `bearer ${token}`)
             .send(newBlog)
             .expect(200)
             .expect('Content-Type', /application\/json/)
@@ -106,6 +138,7 @@ describe('POST /blogs', function () {
 
         const blogList = await api
             .post('/api/blogs')
+            .set('Authorization', `bearer ${token}`)
             .send(newBlog)
             .expect(200)
             .expect('Content-Type', /application\/json/)
@@ -121,6 +154,7 @@ describe('POST /blogs', function () {
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `bearer ${token}`)
             .send(newBlog)
             .expect(400)
 
@@ -134,6 +168,7 @@ describe('POST /blogs', function () {
 
         await api
             .post('/api/blogs')
+            .set('Authorization', `bearer ${token}`)
             .send(newBlog)
             .expect(400)
 
